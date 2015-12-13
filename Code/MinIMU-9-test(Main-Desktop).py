@@ -41,12 +41,18 @@ import serial
 import string
 import math
 
+import paramiko
+
 from time import time
 
 grad2rad = 3.141592/180.0
 
 # Check your COM port and baud rate
-ser = serial.Serial(port='COM9',baudrate=115200, timeout=1)
+#ser = serial.Serial(port='COM9',baudrate=115200, timeout=1)
+
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect('192.168.43.39', username='root', password='edison')
 
 # Main scene
 scene=display(title="Pololu MinIMU-9 + Arduino AHRS")
@@ -106,12 +112,14 @@ plat_arrow = arrow(color=color.green,axis=(1,0,0), shaftwidth=0.06, fixedwidth=1
 
 
 f = open("Serial"+str(time())+".txt", 'w')
+stdin, stdout, stderr = ssh.exec_command(
+    "screen /tty /mfd1")
 
 roll=0
 pitch=0
 yaw=0
 while 1:
-    line = ser.readline()
+    line = stdout.readline()
     if line.find("!ANG:") != -1:          # filter out incomplete (invalid) lines
         line = line.replace("!ANG:","")   # Delete "!ANG:"
         print line
