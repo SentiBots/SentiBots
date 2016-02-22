@@ -21,16 +21,51 @@ void setup()
 { 
   servo1.attach(10);
   servo2.attach(11);
-  //servo3.attach(5);
+  servo3.attach(5);
   servo4.attach(6);
   // attaches the servo on pin 9 to the servo object 
-  servo1.write(100 );
-  servo2.write(80);
-  //servo3.write(90);
-  servo4.write(80);
+  servo1.write(90);
+  servo2.write(90);
+  servo3.write(90);
+  servo4.write(90);
 } 
 
 void loop(){
+  servo1.write(120);
+  delay(1000);
+  servo1.write(90);
+  delay(1000);
+  servo1.write(60);
+  delay(1000);
+  servo1.write(90);
+  delay(1000);
+
+  servo2.write(120);
+  delay(1000);
+  servo2.write(90);
+  delay(1000);
+  servo2.write(60);
+  delay(1000);
+  servo2.write(90);
+  delay(1000);
+
+  servo3.write(120);
+  delay(1000);
+  servo3.write(90);
+  delay(1000);
+  servo3.write(60);
+  delay(1000);
+  servo3.write(90);
+  delay(1000);
+
+  servo4.write(120);
+  delay(1000);
+  servo4.write(90);
+  delay(1000);
+  servo4.write(60);
+  delay(1000);
+  servo4.write(90);
+  delay(1000);
   
 }
 
