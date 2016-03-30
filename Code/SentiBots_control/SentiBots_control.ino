@@ -1,14 +1,32 @@
 #include <PID_v1.h>
 #include <I2Cdev.h>
-#include <MPU9250.h>
 #include <Wire.h>
 #include <Servo.h>
-#include <L3G.h>
-#include <LSM303.h>
+#include "MPU6050_6Axis_MotionApps20.h"
 
-//Library
-L3G gyro;
-LSM303 compass;
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+    #include "Wire.h"
+#endif
+
+MPU6050 mpu;
+
+// MPU control/status vars
+bool dmpReady = false;  // set true if DMP init was successful
+uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
+uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
+uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
+uint16_t fifoCount;     // count of all bytes currently in FIFO
+uint8_t fifoBuffer[64]; // FIFO storage buffer
+
+// orientation/motion vars
+Quaternion q;           // [w, x, y, z]         quaternion container
+VectorInt16 aa;         // [x, y, z]            accel sensor measurements
+VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
+VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
+VectorFloat gravity;    // [x, y, z]            gravity vector
+float euler[3];         // [psi, theta, phi]    Euler angle container
+float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+
 
 char report[100];
 
@@ -30,56 +48,98 @@ double prevTime;
 //PID Variables
 double xSetpoint, xInput, xOutput;
 double ySetpoint, yInput, yOutput;
-double zSetpoint, zInput, zOutput;
 
 double Kp=2, Ki=5, Kd=1;
 PID xPID(&xInput, &xOutput, &xSetpoint, Kp, Ki, Kd, DIRECT);
 PID yPID(&yInput, &yOutput, &ySetpoint, Kp, Ki, Kd, DIRECT);
-PID zPID(&zInput, &zOutput, &zSetpoint, Kp, Ki, Kd, DIRECT);
 
-//Pin Variables
-int16_t xAcc, yAcc, zAcc, xGyr, yGyr, zGyr, mx, my, mz;
-int16_t acc[3], gyr[3];
-int16_t prevAcc[3], prevGyr[3];
-int16_t prevXAcc, prevYAcc, prevZAcc, prevXGyr, prevYGyr, prevZGyr;
-
-//IMU declaration
-MPU9250 accelgyro;
 
 //Servo declaration
 Servo servo1;
 Servo servo2;
-//Servo servo3;
+Servo servo3;
 Servo servo4;
 
 //State Variables
 int state = OFF;
 
+
+volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
+void dmpDataReady() {
+    mpuInterrupt = true;
+}
+
 void setup() {
   //Setting up I2C comms
-    Wire.begin();
+  #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+        Wire.begin();
+        TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz). Comment this line if having compilation difficulties with TWBR.
+    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+        Fastwire::setup(400, true);
+    #endif
 
-  Serial.begin(9600);
+    // initialize device
+    Serial.println(F("Initializing I2C devices..."));
+    mpu.initialize();
 
-  if (!gyro.init()) {
-    Serial.println("Failed to autodetect gyro type!");
-    while (1);
-  }
+    // verify connection
+    Serial.println(F("Testing device connections..."));
+    Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
 
-  gyro.enableDefault();
+    // wait for ready
+    Serial.println(F("\nSend any character to begin DMP programming and demo: "));
+    while (Serial.available() && Serial.read()); // empty buffer
+    while (!Serial.available());                 // wait for data
+    while (Serial.available() && Serial.read()); // empty buffer again
 
-  compass.init();
-  compass.enableDefault();
-  
+    // load and configure the DMP
+    Serial.println(F("Initializing DMP..."));
+    devStatus = mpu.dmpInitialize();
+
+    // supply your own gyro offsets here, scaled for min sensitivity
+    mpu.setXGyroOffset(220);
+    mpu.setYGyroOffset(76);
+    mpu.setZGyroOffset(-85);
+    mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
+
+    // make sure it worked (returns 0 if so)
+    if (devStatus == 0) {
+        // turn on the DMP, now that it's ready
+        Serial.println(F("Enabling DMP..."));
+        mpu.setDMPEnabled(true);
+
+        // enable Arduino interrupt detection
+        Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
+        //attachInterrupt(0, dmpDataReady, RISING);
+        mpuIntStatus = mpu.getIntStatus();
+
+        // set our DMP Ready flag so the main loop() function knows it's okay to use it
+        Serial.println(F("DMP ready! Waiting for first interrupt..."));
+        dmpReady = true;
+
+        // get expected DMP packet size for later comparison
+        packetSize = mpu.dmpGetFIFOPacketSize();
+    } else {
+        // ERROR!
+        // 1 = initial memory load failed
+        // 2 = DMP configuration updates failed
+        // (if it's going to break, usually the code will be 1)
+        Serial.print(F("DMP Initialization failed (code "));
+        Serial.print(devStatus);
+        Serial.println(F(")"));
+    }
+
+  Serial.begin(115200);
+
   servo1.attach(10);
   servo2.attach(11);
-  //servo3.attach(5);
+  servo3.attach(5);
   servo4.attach(6);
 
   //Set Default
   servo1.write(80);
   servo2.write(80);
-  //servo3.write(80);
+  servo3.write(80);
   servo4.write(80);
 
   //Other setups
@@ -87,118 +147,68 @@ void setup() {
   getInput();
   xPID.SetMode(AUTOMATIC);
   yPID.SetMode(AUTOMATIC);
-  zPID.SetMode(AUTOMATIC);
   xPID.SetOutputLimits(40, 120);
   yPID.SetOutputLimits(40, 120);
-  zPID.SetOutputLimits(40, 120);
   xSetpoint = 0;
-  ySetpoint = 0;
-  zSetpoint = 0;
+  ySetpoint = 90;
   
   prevTime = millis();
 }
 
 void loop() {
-  if (state == OFF) {
-    
-  }
-  else if (state == IDLE) {
-    
-  }
-  else {
     //Tilt while lift off/hover/landing
     getInput();
-    getTilt();
     xPID.Compute();
     yPID.Compute();
-    zPID.Compute();
-    //Stabilisation Output
-    //Read the docs of Servo.h
-    compensate();
-  }
+    Debug();
 }
 
-/*
-void getTilt() {
-  float pitchAcc, rollAcc;
-  double now = millis();  
-  double dt = now - prevTime;
-  xInput += ((float)xGyr / GYROSCOPE_SENSITIVITY) * dt;
-  zInput -= ((float)zGyr / GYROSCOPE_SENSITIVITY) * dt;
- 
-  int forceMagnitudeApprox = abs(xAcc) + abs(yAcc) + abs(zAcc);
-  if (forceMagnitudeApprox > 8192 && forceMagnitudeApprox < 32768)
-  {
-    pitchAcc = atan2f((float)zAcc, (float)yAcc) * 180 / M_PI;
-    xInput = xInput * 0.98 + pitchAcc * 0.02;
-    rollAcc = atan2f((float)xAcc, (float)yAcc) * 180 / M_PI;
-    zInput = zInput * 0.98 + rollAcc * 0.02;
-  }
-  prevTime = now;
+void Debug(){
+  Serial.print(xInput);
+  Serial.print(",");
+  Serial.print(yInput);
+  Serial.println();
 }
-*/
-
-void getTilt() {
-  xInput += gyr[0];
-  yInput += gyr[1];
-}
-
 void getInput() {
-  gyro.read();
+    if (!dmpReady) return;
 
-  compass.read();
-
-  for (int i = 0; i < acc.length; i++) {
-    prevAcc[i] = acc[i];
-    prevGyr[i] = gyr[i];
-  }
-  
-  acc[0] = compass.a.y;
-  acc[1] = -compass.a.x;
-  acc[2] = compass.a.z;
-
-  gyr[0] = gyro.g.y;
-  gyr[1] = -gyro.g.x;
-  gyr[2] = gyro.g.z;
-
-  //Filter
-  for (int i = 0; i < acc.length; i++) {
-    double rChange = (acc[i] - prevAcc[i]) / prevAcc[i];
-    if (rChange < 1.5 && rChange > 0.001) {
-      acc[i] = prevAcc[i];
+    // wait for MPU interrupt or extra packet(s) available
+    while (fifoCount < packetSize) {
+       fifoCount = mpu.getFIFOCount();
     }
+
+    // reset interrupt flag and get INT_STATUS byte
+    mpuInterrupt = false;
+    mpuIntStatus = mpu.getIntStatus();
+
+    // get current FIFO count
+    fifoCount = mpu.getFIFOCount();
+
+    // check for overflow (this should never happen unless our code is too inefficient)
+    if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
+        // reset so we can continue cleanly
+        mpu.resetFIFO();
+        Serial.println(F("FIFO overflow!"));
+
+    // otherwise, check for DMP data ready interrupt (this should happen frequently)
+    } else if (mpuIntStatus & 0x02) {
+        // wait for correct available data length, should be a VERY short wait
+        while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
+
+        // read a packet from FIFO
+        mpu.getFIFOBytes(fifoBuffer, packetSize);
+        
+        // track FIFO count here in case there is > 1 packet available
+        // (this lets us immediately read more without waiting for an interrupt)
+        fifoCount -= packetSize;
+            // display Euler angles in degrees
+            mpu.dmpGetQuaternion(&q, fifoBuffer);
+            mpu.dmpGetGravity(&gravity, &q);
+            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+            xInput=ypr[0] * 180/M_PI;
+            //pitch=ypr[1] * 180/M_PI;
+            yInput=ypr[2] * 180/M_PI;
+            
   }
-  for (int i = 0; i < gyr.length; i++ {
-    double rChange = (gyr[i] - prevGyr[i]) / prevGyr[i];
-    if (rChange < 1.5 && rChange > 0.001) {
-      gyr[i] = prevGyr[i];
-    }
-  }
-
-  snprintf(report, sizeof(report), "G: %8d %8d %8d    A: %8d %8d %8d",
-    gyr[0], gyr[1], gyr[2],
-    acc[0], acc[1], acc[2]);
-  Serial.println(report);
-
-  delay(100);
-}
-
-void checkCommands() {
-  if (Serial.available() > 1) {
-    int command = Serial.read();
-    if (command == 0) {
-      state = Serial.read();
-    }
-    else if (command < 20) {
-      
-    }
-  }
-}
-
-void compensate() {
-
-servo2.write(xOutput);
-servo4.write(160 - xOutput);
-  
 }
 

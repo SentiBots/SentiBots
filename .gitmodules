@@ -1,0 +1,3 @@
+[submodule "SentibotsControllerAPKBuild"]
+	path = SentibotsControllerAPKBuild
+	url = ssh://git@makerforce.io:222/isaac/SentibotsControllerAPKBuild.git
