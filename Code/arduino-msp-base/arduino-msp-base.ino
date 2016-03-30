@@ -75,13 +75,13 @@ bool processOutCommand(uint8_t cmdMSP) {
 static bool processInCommand(void) {
   switch (currentPort.cmdMSP) {
     case MSP_SET_RAW_COAX:
+      s4.write(45);
       m1.writeMicroseconds(read16());
       m2.writeMicroseconds(read16());
       s1.write(read16());
       s2.write(read16());
       s3.write(read16());
       s4.write(read16());
-      //s4.write(180);
       break;
     default:
       return false;
@@ -147,16 +147,16 @@ void setup() {
   // PD3 PD5 PD6 PB2 PB3
   // 3   5   6   10  11
   m1.attach(3);
-  m2.attach(9);
+  m2.attach(10); // 9
   s1.attach(5);
   s2.attach(6);
   s3.attach(11);
-  s4.attach(10);
+  s4.attach(9); // 10
   m1.writeMicroseconds(1000);
   m2.writeMicroseconds(1000);
   s1.write(90);
-  s2.write(45);
-  s3.write(45);
+  s2.write(90);
+  s3.write(90);
   s4.write(90);
   //memset(currentPort, 0, sizeof(mspPort_t));
   currentPort.c_state = IDLE;
