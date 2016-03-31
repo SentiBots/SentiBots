@@ -135,10 +135,10 @@ static bool processInCommand(void) {
     case MSP_SET_RAW_COAX:
       m1.writeMicroseconds(read16());
       read16();
+      xSetpoint = read16() - 90;
       read16();
       read16();
-      read16();
-      read16();
+      ySetpoint = read16() - 90;
       break;
     default:
       return false;
