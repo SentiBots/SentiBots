@@ -10,6 +10,7 @@
 
 MPU6050 mpu;
 
+double prevY;
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -46,13 +47,14 @@ char report[100];
 double prevTime;
 
 //PID Variables
-double xSetpoint, xInput, xOutput;
-double ySetpoint, yInput, yOutput;
+double xSetpoint, xInput, xOutput, xRealOutput;
+double ySetpoint, yInput, yOutput, yRealOutput;
+double zSetpoint, zInput, zOutput, zRealOutput;
 
-double Kp=2, Ki=5, Kd=1;
+double Kp=2, Ki=0, Kd=0;
 PID xPID(&xInput, &xOutput, &xSetpoint, Kp, Ki, Kd, DIRECT);
 PID yPID(&yInput, &yOutput, &ySetpoint, Kp, Ki, Kd, DIRECT);
-
+PID zPID(&zInput, &zOutput, &zSetpoint, Kp, Ki, Kd, DIRECT);
 
 //Servo declaration
 Servo servo1;
@@ -63,13 +65,14 @@ Servo servo4;
 //State Variables
 int state = OFF;
 
-
+bool negative = false;
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
     mpuInterrupt = true;
 }
 
 void setup() {
+   Serial.begin(115200);
   //Setting up I2C comms
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
@@ -86,21 +89,15 @@ void setup() {
     Serial.println(F("Testing device connections..."));
     Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
 
-    // wait for ready
-    Serial.println(F("\nSend any character to begin DMP programming and demo: "));
-    while (Serial.available() && Serial.read()); // empty buffer
-    while (!Serial.available());                 // wait for data
-    while (Serial.available() && Serial.read()); // empty buffer again
-
     // load and configure the DMP
     Serial.println(F("Initializing DMP..."));
     devStatus = mpu.dmpInitialize();
 
     // supply your own gyro offsets here, scaled for min sensitivity
-    mpu.setXGyroOffset(220);
-    mpu.setYGyroOffset(76);
-    mpu.setZGyroOffset(-85);
-    mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
+    mpu.setXGyroOffset(0);
+    mpu.setYGyroOffset(0);
+    mpu.setZGyroOffset(0);
+    mpu.setZAccelOffset(-1688); // 1688 factory default for my test chip
 
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
@@ -129,28 +126,29 @@ void setup() {
         Serial.println(F(")"));
     }
 
-  Serial.begin(115200);
-
-  servo1.attach(10);
-  servo2.attach(11);
-  servo3.attach(5);
-  servo4.attach(6);
+  servo1.attach(5);
+  servo2.attach(6);
+  servo3.attach(11);
+  servo4.attach(10);
 
   //Set Default
-  servo1.write(80);
-  servo2.write(80);
-  servo3.write(80);
-  servo4.write(80);
+  servo1.write(90);
+  servo2.write(90);
+  servo3.write(90);
+  servo4.write(90);
 
   //Other setups
   state = HOVER;
   getInput();
   xPID.SetMode(AUTOMATIC);
   yPID.SetMode(AUTOMATIC);
-  xPID.SetOutputLimits(40, 120);
-  yPID.SetOutputLimits(40, 120);
+  zPID.SetMode(AUTOMATIC);
+  xPID.SetOutputLimits(-40, 40);
+  yPID.SetOutputLimits(-40, 40);
+  zPID.SetOutputLimits(-40, 40);
   xSetpoint = 0;
-  ySetpoint = 90;
+  ySetpoint = 0;
+  zSetpoint = 0;
   
   prevTime = millis();
 }
@@ -159,15 +157,21 @@ void loop() {
     //Tilt while lift off/hover/landing
     getInput();
     xPID.Compute();
+    xRealOutput = xOutput + 90;
     yPID.Compute();
-    Debug();
+    yRealOutput = yOutput + 90;
+    ServoController();
 }
 
-void Debug(){
-  Serial.print(xInput);
-  Serial.print(",");
+void ServoController(){
+  servo1.write(xRealOutput);
+  servo2.write(180-yRealOutput);
+  servo3.write(180-xRealOutput);
+  servo4.write(yRealOutput);
   Serial.print(yInput);
-  Serial.println();
+  Serial.print(",");
+  Serial.print(yRealOutput);
+  Serial.println("");
 }
 void getInput() {
     if (!dmpReady) return;
@@ -205,10 +209,16 @@ void getInput() {
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            xInput=ypr[0] * 180/M_PI;
-            //pitch=ypr[1] * 180/M_PI;
-            yInput=ypr[2] * 180/M_PI;
-            
+            //yInput=ypr[0] * 180/M_PI;
+            yInput=ypr[1] * 180/M_PI;
+            xInput=ypr[2] * 180/M_PI;
+            yInput=yInput-35;
+            if(xInput<0){
+              yInput=yInput-xInput;
+            }
+            else{
+              yInput=yInput+xInput;
+            }
   }
 }
 

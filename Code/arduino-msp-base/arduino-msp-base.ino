@@ -13,17 +13,17 @@ Servo s4;
 
 mspPort_t currentPort;
 
-static void serialize8(uint8_t a) {
+void serialize8(uint8_t a) {
   Serial.write(a);
   currentPort.checksum ^= a;
 }
 
-static void serialize16(uint16_t a) {
+void serialize16(uint16_t a) {
   serialize8((uint8_t)(a >> 0));
   serialize8((uint8_t)(a >> 8));
 }
 
-static void serialize32(uint32_t a) {
+void serialize32(uint32_t a) {
   serialize16((uint16_t)(a >> 0));
   serialize16((uint16_t)(a >> 16));
 }
