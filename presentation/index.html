@@ -548,13 +548,13 @@
 		<script>
 			(() => {
 				var chart;
-
 				document.getElementById("stats-2-canvas").style.transition = "opacity 0.7s";
 				document.getElementById("stats-2-canvas").style.opacity = "0";
 				document.getElementById("stats-2").addEventListener("impress:stepenter", function () {
+					document.getElementById("stats-1-canvas").style.opacity = "1";
 					var ctx = document.getElementById("stats-2-canvas").getContext("2d");
 					var colors = ["68,68,68", "100,100,100", "132,132,132"];
-					var chart = new Chart(ctx).Bar({
+					chart = new Chart(ctx).Bar({
 						labels: ["Drop Height (m)", "Cost ×10⁻² (SGD)", "Flight Time (min)", "Payload (kg)", "Longest side (m)"],
 						datasets: [
 							{ label: "SentiBot", data: [5, 100 / 100, 15, 0.1, 0.1], fillColor: "rgba(" + colors[0] + ",0.75)", strokeColor: "rgba(" + colors[0] + ",0.5)", pointColor: "rgba(" + colors[0] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[0] + ",1)" },
