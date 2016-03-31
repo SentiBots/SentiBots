@@ -272,7 +272,7 @@ typedef enum {
     COMMAND_RECEIVED
 } mspState_e;
 
-#define MSP_PORT_INBUF_SIZE 64
+#define MSP_PORT_INBUF_SIZE 32
 
 typedef struct mspPort_s {
     uint8_t offset;
