@@ -289,7 +289,7 @@ blockquote {
 }*/
 
 body {
-	transition: background-color 1s;
+	transition: background-color 1s, opacity 0.2s;
 }
 .impress-enabled .step {
 	transition: color 0.5s, opacity 1s;
@@ -342,6 +342,19 @@ body {
 
 .impress-on-photos .photo {
 	opacity: 1.0;
+}
+
+.-legend {
+	position: absolute;
+	top: 0;
+	right: 0;
+	list-style: none;
+	color: #fff;
+	font-size: 20px;
+}
+.-legend span {
+	display: block;
+	padding: 0 6px;
 }
 
 .whys li {

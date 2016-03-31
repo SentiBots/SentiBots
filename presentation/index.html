@@ -490,14 +490,15 @@
 			(() => {
 				var ctx = document.getElementById("stats-1-canvas").getContext("2d");
 				//var colors = ["191,33,102", "36,57,178", "29,191,94"];
-				var colors = ["242,50,163", "153,38,252", "46,73,229"];
-				var chart = new Chart(ctx).Radar({
+				//var colors = ["242,50,163", "153,38,252", "46,73,229"];
+				var colors = ["68,68,68", "100,100,100", "132,132,132"];
+				chart = new Chart(ctx).Radar({
 					//labels: ["4 × Drop Height (m)", "2000 ÷ Cost ($)", "Flight Time (min)", "10 × Payload (kg)", "2 ÷ Longest side (m)"],
 					labels: ["Drop Height", "1 ÷ Cost", "Flight Time", "Payload", "1 ÷ Longest Side"],
 					datasets: [
-						{ label: "SentiBot", data: [4 * 5, 2000 / 100, 15, 10 * 0.1, 2 / 0.1], fillColor: "rgba(" + colors[0] + ",0.2)", strokeColor: "rgba(" + colors[0] + ",0.5)", pointColor: "rgba(" + colors[0] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[0] + ",1)" },
-						{ label: "AR-Drone", data: [4 * 5, 2000 / 400, 10, 10 * 0.5, 2 / 0.5], fillColor: "rgba(" + colors[1] + ",0.2)", strokeColor: "rgba(" + colors[1] + ",1)", pointColor: "rgba(" + colors[1] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[1] + ",1)" },
-						{ label: "Phantom 2", data: [4 * 3, 2000 / 1000, 20, 10 * 2, 2 / 0.5], fillColor: "rgba(" + colors[2] + ",0.2)", strokeColor: "rgba(" + colors[2] + ",1)", pointColor: "rgba(" + colors[2] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[2] + ",1)" }
+						{ label: "SentiBot", data: [4 * 5, 2000 / 100, 15, 10 * 0.1, 2 / 0.1], fillColor: "rgba(" + colors[0] + ",0.4)", strokeColor: "rgba(" + colors[0] + ",1)", pointColor: "rgba(" + colors[0] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[0] + ",1)" },
+						{ label: "AR-Drone", data: [4 * 5, 2000 / 400, 10, 10 * 0.5, 2 / 0.5], fillColor: "rgba(" + colors[1] + ",0.4)", strokeColor: "rgba(" + colors[1] + ",1)", pointColor: "rgba(" + colors[1] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[1] + ",1)" },
+						{ label: "Phantom 2", data: [4 * 3, 2000 / 1000, 20, 10 * 2, 2 / 0.5], fillColor: "rgba(" + colors[2] + ",0.4)", strokeColor: "rgba(" + colors[2] + ",1)", pointColor: "rgba(" + colors[2] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[2] + ",1)" }
 					]
 				}, {
 					scaleLineColor: "rgba(68,68,68,0.2)",
@@ -515,6 +516,9 @@
 					pointDotStrokeWidth: 2,
 					datasetStrokeWidth: 2
 				});
+				var div = document.createElement("div");
+				div.innerHTML = chart.generateLegend();
+				document.getElementById("stats-1").appendChild(div);
 				/*
 				var chart = new Chart(ctx).Bar({
 					labels: ["Drop Height (m)", "Cost × 10⁻² ($)", "Flight Time (min)", "Payload (kg)", "Longest dimension (m)"],
@@ -533,13 +537,13 @@
 		<script>
 			(() => {
 				var ctx = document.getElementById("stats-2-canvas").getContext("2d");
-				var colors = ["242,50,163", "153,38,252", "46,73,229"];
+				var colors = ["68,68,68", "100,100,100", "132,132,132"];
 				var chart = new Chart(ctx).Bar({
 					labels: ["Drop Height (m)", "Cost ×10⁻² (SGD)", "Flight Time (min)", "Payload (kg)", "Longest side (m)"],
 					datasets: [
-						{ label: "SentiBot", data: [5, 100 / 100, 15, 0.1, 0.1], fillColor: "rgba(" + colors[0] + ",0.2)", strokeColor: "rgba(" + colors[0] + ",0.5)", pointColor: "rgba(" + colors[0] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[0] + ",1)" },
-						{ label: "AR-Drone", data: [5, 400 / 100, 10, 0.5, 0.5], fillColor: "rgba(" + colors[1] + ",0.2)", strokeColor: "rgba(" + colors[1] + ",1)", pointColor: "rgba(" + colors[1] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[1] + ",1)" },
-						{ label: "Phantom 2", data: [3, 1000 / 100, 20, 2, 0.5], fillColor: "rgba(" + colors[2] + ",0.2)", strokeColor: "rgba(" + colors[2] + ",1)", pointColor: "rgba(" + colors[2] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[2] + ",1)" }
+						{ label: "SentiBot", data: [5, 100 / 100, 15, 0.1, 0.1], fillColor: "rgba(" + colors[0] + ",0.75)", strokeColor: "rgba(" + colors[0] + ",0.5)", pointColor: "rgba(" + colors[0] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[0] + ",1)" },
+						{ label: "AR-Drone", data: [5, 400 / 100, 10, 0.5, 0.5], fillColor: "rgba(" + colors[1] + ",0.75)", strokeColor: "rgba(" + colors[1] + ",1)", pointColor: "rgba(" + colors[1] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[1] + ",1)" },
+						{ label: "Phantom 2", data: [3, 1000 / 100, 20, 2, 0.5], fillColor: "rgba(" + colors[2] + ",0.75)", strokeColor: "rgba(" + colors[2] + ",1)", pointColor: "rgba(" + colors[2] + ",1)", pointStrokeColor: "#fff", pointHighlightFill: "#fff", pointHighlightStroke: "rgba(" + colors[2] + ",1)" }
 					]
 				}, {
 					scaleLineColor: "rgba(68,68,68,0.4)",
@@ -564,6 +568,9 @@
 					scaleStepWidth: 2,
 
 				});
+				var div = document.createElement("div");
+				div.innerHTML = chart.generateLegend();
+				document.getElementById("stats-2").appendChild(div);
 			})();
 		</script>
 	</div>
@@ -685,6 +692,7 @@ if ("ontouchstart" in document.documentElement) {
     
 -->
 <script>
+//var isfullscreen = false;
 var fullscreen = function (){
 	var elem = document.documentElement;
 
@@ -697,15 +705,40 @@ var fullscreen = function (){
 	else if (elem.webkitRequestFullScreen) {
 		elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
 	}
-}
+	//isfullscreen = !isfullscreen;
+};
+var blank = function (){ 
+	var elem = document.body;
+	
+	if (elem.style.opacity != "0") {
+		elem.style.opacity = "0";
+	}
+	else {
+		elem.style.opacity = "1";
+	}
+};
+var start = function (){ 
+	impress().goto(0);
+	//if (!isfullscreen) {
+	//	fullscreen();
+	//}
+};
+document.documentElement.style.backgroundColor = "#444";
 document.addEventListener("keydown", function ( event ) {
-	if (event.keyCode == 70) {
+	if (event.keyCode == 70 || event.keyCode == 190 || event.keyCode == 116) {
 		event.preventDefault();
 	}
 });
 document.addEventListener("keyup", function ( event ) {
 	if (event.keyCode == 70) {
 		fullscreen();
+	}
+	else if (event.keyCode == 190) {
+		blank();
+	}
+	else if (event.keyCode == 116) {
+		start();
+		//event.preventDefault();
 	}
 });
 </script>
