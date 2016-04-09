@@ -65,10 +65,17 @@ bool PID::Compute() {
      double kiOutput = ITerm;
      double kdOutput = kd * -dInput;
 
+     int tuneDiff = learningRate * error;
+     if (controllerDirection == REVERSE) {
+       kp = -kp;
+       ki = -ki;
+       kd = -kd;
+     }
+     
      //Tune
-     PID::SetTunings(kp - learningRate * error * kpOutput,
-		     ki - learningRate * error * kiOutput,
-		     kd - learningRate * error * kdOutput);
+     PID::SetTunings(kp - tuneDiff * kpOutput,
+		     ki - tuneDiff * kiOutput,
+		     kd - tuneDiff * kdOutput);
      
      
      /*Compute PID Output*/
@@ -218,4 +225,3 @@ double PID::GetKi() { return dispKi;}
 double PID::GetKd() { return dispKd;}
 int PID::GetMode() { return inAuto ? AUTOMATIC : MANUAL;}
 int PID::GetDirection() { return controllerDirection;}
-
