@@ -286,6 +286,26 @@ void setup() {
 }
 
 void loop() {
+  xSetPoint =  40;
+  delay(1000);
+  xSetPoint = 0;
+  delay(1000);
+  xSetPoint = -40;
+  delay(1000);
+  xSetPoint = 0;
+  delay(1000);
+
+  ySetPoint =  40;
+  delay(1000);
+  ySetPoint = 0;
+  delay(1000);
+  ySetPoint = -40;
+  delay(1000);
+  ySetPoint = 0;
+  delay(1000);
+
+
+  /*
   getInput();
   if (!isOffsetSet) {
     if (millis() - startTime > waitTime) {
@@ -318,6 +338,7 @@ void loop() {
   yPID.Compute();
   yRealOutput = yOutput + 90;
   ServoController();
+  */
 }
 
 void getInput() {
