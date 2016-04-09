@@ -46,7 +46,7 @@ double xSetpoint, xInput, xOutput, xRealOutput;
 double ySetpoint, yInput, yOutput, yRealOutput;
 double zSetpoint, zInput, zOutput, zRealOutput;
 
-double Kp=05, Ki=0, Kd=0;
+double Kp=5, Ki=0, Kd=0;
 PID xPID(&xInput, &xOutput, &xSetpoint, Kp, Ki, Kd, DIRECT);
 PID yPID(&yInput, &yOutput, &ySetpoint, Kp, Ki, Kd, DIRECT);
 PID zPID(&zInput, &zOutput, &zSetpoint, Kp, Ki, Kd, DIRECT);
@@ -57,6 +57,11 @@ volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin h
 long startTime;
 long waitTime = 20000;
 boolean isOffsetSet = false;
+
+long prevCommandTime;
+long commandIntervals = 100;
+double xCommand = 0;
+double yCommand = 0;
 
 double xInputOffset = 0;
 double yInputOffset = 0;
@@ -135,15 +140,25 @@ bool processOutCommand(uint8_t cmdMSP) {
   return true;
 }
 
+int sign;
+
 static bool processInCommand(void) {
   switch (currentPort.cmdMSP) {
     case MSP_SET_RAW_COAX:
       m1.writeMicroseconds(read16());
       read16();
-      xSetpoint = read16() - 90;
+      sign = read16();
+      if (sign >= 32768) {
+        sign = 65536 - sign;
+      }
+      xCommand = sign - 90;
       read16();
       read16();
-      ySetpoint = read16() - 90;
+      sign = read16();
+      if (sign >= 32768) {
+        sign = 65536 - sign;
+      }
+      yCommand = sign - 90;
       break;
     default:
       return false;
@@ -283,29 +298,15 @@ void setup() {
     prevTime = millis();
 
     startTime = millis();
+
+    xInput = 0;
+    yInput = 0;
+
+    prevCommandTime = millis();
 }
 
 void loop() {
-  xSetPoint =  40;
-  delay(1000);
-  xSetPoint = 0;
-  delay(1000);
-  xSetPoint = -40;
-  delay(1000);
-  xSetPoint = 0;
-  delay(1000);
-
-  ySetPoint =  40;
-  delay(1000);
-  ySetPoint = 0;
-  delay(1000);
-  ySetPoint = -40;
-  delay(1000);
-  ySetPoint = 0;
-  delay(1000);
-
-
-  /*
+  
   getInput();
   if (!isOffsetSet) {
     if (millis() - startTime > waitTime) {
@@ -320,6 +321,13 @@ void loop() {
     }
     return;
   }
+
+  if (millis() - prevCommandTime > commandIntervals) {
+    xSetpoint = xCommand;
+    ySetpoint = yCommand;
+    prevCommandTime = millis();
+  }
+  
   while (Serial.available() > 0) {
 
     uint8_t c = Serial.read();
@@ -331,14 +339,12 @@ void loop() {
       break; // process one command at a time so as not to block.
     }    
   }
-
-  getInput();
+  
   xPID.Compute();
   xRealOutput = xOutput + 90;
   yPID.Compute();
   yRealOutput = yOutput + 90;
   ServoController();
-  */
 }
 
 void getInput() {
@@ -390,8 +396,8 @@ void ServoController(){
   s2.write(yRealOutput);
   s3.write(180-xRealOutput);
   s4.write(180-yRealOutput);
-  Serial.print(xInput);
+  Serial.print(xSetpoint);
   Serial.print(",");
-  Serial.print(yInput);
+  Serial.print(ySetpoint);
   Serial.println("");
 }
