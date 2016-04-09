@@ -31,38 +31,38 @@ void setup()
 } 
 
 void loop(){
-  servo1.write(130);
+  servo1.write(120);
   delay(1000);
   servo1.write(90);
   delay(1000);
-  servo1.write(50);
+  servo1.write(60);
   delay(1000);
   servo1.write(90);
   delay(1000);
 
-  servo2.write(130);
+  servo2.write(120);
   delay(1000);
   servo2.write(90);
   delay(1000);
-  servo2.write(50);
+  servo2.write(60);
   delay(1000);
   servo2.write(90);
   delay(1000);
 
-  servo3.write(130);
+  servo3.write(120);
   delay(1000);
   servo3.write(90);
   delay(1000);
-  servo3.write(50);
+  servo3.write(60);
   delay(1000);
   servo3.write(90);
   delay(1000);
 
-  servo4.write(130);
+  servo4.write(120);
   delay(1000);
   servo4.write(90);
   delay(1000);
-  servo4.write(50);
+  servo4.write(60);
   delay(1000);
   servo4.write(90);
   delay(1000);
