@@ -46,13 +46,20 @@ double xSetpoint, xInput, xOutput, xRealOutput;
 double ySetpoint, yInput, yOutput, yRealOutput;
 double zSetpoint, zInput, zOutput, zRealOutput;
 
-double Kp=5, Ki=0, Kd=0;
+double Kp=05, Ki=0, Kd=0;
 PID xPID(&xInput, &xOutput, &xSetpoint, Kp, Ki, Kd, DIRECT);
 PID yPID(&yInput, &yOutput, &ySetpoint, Kp, Ki, Kd, DIRECT);
 PID zPID(&zInput, &zOutput, &zSetpoint, Kp, Ki, Kd, DIRECT);
 
 bool negative = false;
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
+
+long startTime;
+long waitTime = 20000;
+boolean isOffsetSet = false;
+
+double xInputOffset = 0;
+double yInputOffset = 0;
 
 //unsigned int cycleDelay = 5;
 
@@ -62,8 +69,6 @@ Servo s1;
 Servo s2;
 Servo s3;
 Servo s4;
-
-
 
 mspPort_t currentPort;
 
@@ -276,9 +281,25 @@ void setup() {
     zSetpoint = 0;
   
     prevTime = millis();
+
+    startTime = millis();
 }
 
 void loop() {
+  getInput();
+  if (!isOffsetSet) {
+    if (millis() - startTime > waitTime) {
+      xInputOffset = xInput;
+      yInputOffset = yInput;
+      xRealOutput = 50;
+      ServoController();
+      delay(100);                                           
+      xRealOutput = 0;
+      ServoController();
+      isOffsetSet = true;
+    }
+    return;
+  }
   while (Serial.available() > 0) {
 
     uint8_t c = Serial.read();
@@ -288,8 +309,7 @@ void loop() {
     if (currentPort.c_state == COMMAND_RECEIVED) {
       mspProcessReceivedCommand();
       break; // process one command at a time so as not to block.
-    }
-
+    }    
   }
 
   getInput();
@@ -339,8 +359,8 @@ void getInput() {
             zInput=ypr[0] * 180/M_PI;
             yInput=ypr[1] * 180/M_PI;
             xInput=ypr[2] * 180/M_PI;
-            xInput=xInput-2.5;
-            yInput=yInput-3;
+            xInput=xInput-xInputOffset;
+            yInput=yInput-yInputOffset;
   }
 }
 
