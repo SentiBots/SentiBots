@@ -63,7 +63,8 @@ class PID
     double ki;                  // * (I)ntegral Tuning Parameter
     double kd;                  // * (D)erivative Tuning Parameter
     double learningRate;
-
+	double prevKpOutput, prevKiOutput, prevKdOutput;
+	
 	int controllerDirection;
 
     double *myInput;              // * Pointers to the Input, Output, and Setpoint variables

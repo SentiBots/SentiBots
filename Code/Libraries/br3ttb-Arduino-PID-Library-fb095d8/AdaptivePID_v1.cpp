@@ -33,6 +33,10 @@ PID::PID(double* Input, double* Output, double* Setpoint,
     
     PID::SetControllerDirection(ControllerDirection);
     PID::SetTunings(Kp, Ki, Kd);
+	
+	prevKpOutput = 0;
+	prevKiOutput = 0;
+	prevKdOutput = 0;
 
     lastTime = millis() - SampleTime;				
 }
@@ -73,10 +77,13 @@ bool PID::Compute() {
      }
      
      //Tune
-     PID::SetTunings(kp - tuneDiff * kpOutput,
-		     ki - tuneDiff * kiOutput,
-		     kd - tuneDiff * kdOutput);
-     
+     PID::SetTunings(kp - tuneDiff * prevKpOutput,
+		     ki - tuneDiff * prevKiOutput,
+		     kd - tuneDiff * prevKdOutput);
+			 
+	prevKpOutput = kpOutput;
+	prevKiOutput = kiOutput;
+	prevKdOutput = kdOutput;
      
      /*Compute PID Output*/
      double output = kpOutput + kiOutput * kdOutput;
