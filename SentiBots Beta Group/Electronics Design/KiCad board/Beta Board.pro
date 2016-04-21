@@ -1,4 +1,4 @@
-update=4/6/2016 8:15:09 PM
+update=4/21/2016 1:03:28 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -107,3 +107,11 @@ LibName75=video
 LibName76=Xicor
 LibName77=Zilog
 LibName78=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/MPU-9250
+LibName79=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/LM2678T-5.0
+LibName80=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/LP38691SD-3.3
+LibName81=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/MIC5205-3.3YM5TR
+LibName82=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/IntelEdisonBlockTemplate-cache
+LibName83=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/TXB0108PWR
+LibName84=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/DataStorage
+LibName85=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/Opendous_KiCad_Libraries/library/opendous
+LibName86=C:/Users/s_sud/SentiBots/SentiBots Beta Group/Electronics Design/KiCad Libraries/MIC2039
