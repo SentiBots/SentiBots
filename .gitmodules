@@ -10,3 +10,6 @@
 [submodule "presentations"]
 	path = presentations
 	url = ssh://git@makerforce.io:222/SentiBots/presentations.git
+[submodule "website"]
+	path = website
+	url = ssh://git@makerforce.io:222/SentiBots/website.git
