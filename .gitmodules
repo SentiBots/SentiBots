@@ -1,3 +1,12 @@
 [submodule "SentibotsControllerAPKBuild"]
 	path = SentibotsControllerAPKBuild
 	url = ssh://git@makerforce.io:222/isaac/SentibotsControllerAPKBuild.git
+[submodule "code"]
+	path = code
+	url = ssh://git@makerforce.io:222/SentiBots/code.git
+[submodule "design"]
+	path = design
+	url = ssh://git@makerforce.io:222/SentiBots/design.git
+[submodule "presentations"]
+	path = presentations
+	url = ssh://git@makerforce.io:222/SentiBots/presentations.git
