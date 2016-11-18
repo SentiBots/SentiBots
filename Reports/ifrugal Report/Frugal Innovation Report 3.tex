@@ -5,6 +5,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage{tabularx}
+
 \title{Affordable drone education platform}
 
 \date{September 10, 2016}
@@ -76,7 +78,7 @@ By spinning counter-rotating bullnose propellers using a 4000kV race quad motor,
 
 \begin{table}[b]
 	\centering
-	\begin{tabular}{ | l | l l | }
+	\begin{tabular}{ | l | l | l | }
 		Configuration & Maximum Thrust/g & Maximum Current/A \\
 		\hline
 		A & 200 & 18 \\
@@ -168,9 +170,9 @@ SentiBots has two methods of operation: manual and autonomous. In manual, an ope
 
 \subsection{Lower level subsystem}
 
-The control algorithm in SentiBot is standard. Sensor data is mapped into error values that can be used to compensate for frame errors and instabilities. IMU data (processed by an internal Digital Signal Processor) is read over I^2C to obtain yaw-pitch-roll (YPR) data. Each YPR value is used in PID loops for each axis to obtain error values. The angle of the control surfaces are set by the error values, therefore stabilizing the system. This computation runs on the ATmega 328.
+The control algorithm in SentiBot is standard. Sensor data is mapped into error values that can be used to compensate for frame errors and instabilities. IMU data (processed by an internal Digital Signal Processor) is read over I\textsuperscript{2}C to obtain yaw-pitch-roll (YPR) data. Each YPR value is used in PID loops for each axis to obtain error values. The angle of the control surfaces are set by the error values, therefore stabilizing the system. This computation runs on the ATmega 328.
 
-As shown in figure \ref{fig:intelsystem}, A I^2C peripheral interface is used between the lower level subsystem and the IMU. A USART interface is used between the microcontroller and the processor running the higher level subsystem. This communication is managed by software that utilizes the Multi-Wii protocol.[5]
+As shown in figure \ref{fig:intelsystem}, an I\textsuperscript{2}C peripheral interface is used between the lower level subsystem and the IMU. A USART interface is used between the microcontroller and the processor running the higher level subsystem. This communication is managed by software that utilizes the Multi-Wii protocol.[5]
 
 The firmware which runs the lower level subsystem is based on the open-source Multi-Wii project. Minor modifications were made to the firmware for coax-copter support but the built-in Multi-Wii PID loop controller and communication infrastructure were used. The open-source Multi-Wii framework is modular and easy to modify for the end user. The Multi-Wii platform is also well documented and easy to understand. The lower level subsystem carries out basic collision avoidance system with 4 IR sensors installed around the bot. This prevents higher level algorithms from allowing crashes and damage to the bot and the environment. This is done through a modification that is made to the Multi-Wii framework which adds collision avoidance functionality to it.
 
@@ -182,7 +184,45 @@ The communication system is reliant on the onboard WiFi chipset present in the I
 
 \subsection{Ground-station software}
 
-We are currently still in the process of designing and implementing the ground-station. However, we have developed a method to control it through an android app. It uses a simple UDP interface and connects to the Edison via WiFi which allows instructions to be issued to the SentiBot. Lately, a Spektrum satellite receiver has also been added to the spare UART2 port for longer range and lower latency. 
+We are currently still in the process of designing and implementing the ground-station. However, we have developed a method to control it through an android app. It uses a simple UDP interface and connects to the Edison via WiFi which allows instructions to be issued to the SentiBot. Lately, a Spektrum satellite receiver has also been added to the spare UART2 port for longer range and lower latency.
+
+\section{Applications}
+
+\subsection{Applications to education}
+
+The SentiBots is intended for use in educational institutions from secondary to higher education. This is achieved through the SentiBots hardware and software. To demonstrate the platform’s versatility, a possible lesson plan for different age-groups from 12-15, 15-18 and 18 and above is crafted. Variations on this lesson plan can be used as a template for integration of SentiBot into the school curriculum.
+
+\subsubsection{Age group of 12-15}
+
+In this age group of 12-15 are the lower secondary students who have limited knowledge on the technical aspects of robotics, control systems and embedded systems. The students are unable to perform advanced mathematics as well and are still in the progress of learning algebraic concepts like factorization and expansion. In physics, these students are learning basic kinematics and dynamics. The SentiBot can be used as a tool to facilitate learning of kinematic concepts in physics and algebraic concepts in mathematics. The lesson plans for use in kinematics education for students aged 12-15 is provided as a sample.
+
+\subsubsection{SentiBot for learning kinematics}
+
+In kinematics, the students are learning about position and its higher derivatives up to the third derivative of acceleration. The SentiBot can be used to demonstrate the motion of particles with respect to position, velocity and acceleration graphs giving an interactive and visual representation of physics in real life.  The SentiBot can be utilized to allow students to visualize trajectories and projectile motion using a pre-programmed flight path. The SentiBot can provide insight into free-fall and gravity by acting as a sensor that can be dropped and measure gravity.
+
+\begin{table}[h]
+	\centering
+	\begin{tabularx}{\linewidth}{ | >{\setlength\hsize{.2\hsize}} X | >{\setlength\hsize{.5\hsize}} X | X | }
+		Lesson Number & Lesson title and content & Application of SentiBot \\
+		\hline
+		1 & Qualitative description of motion & Demonstrate different types of movement using SentiBots( ie constant velocity, accelerating, decelerating) \\
+		2 & Qualitative description of motion through charts & NIL \\
+		3 & Using Position vs Time graphs & Ask students to create different position-time graphs and simulate it in real life using SentiBots \\
+		4 & Using Velocity vs Time graphs & Ask students to create different velocity-time graphs and simulate it in real life using SentiBots \\
+		5 & Free-fall and acceleration & Drop SentiBots from a height and graph position/velocity against time \\
+		6 & Kinematics Equations & NIL \\
+	\end{tabularx}
+	\caption{Hardware components of the SentiBot}
+	\label{fig:sb-components}
+\end{table}
+
+This lesson plan only encompasses the topic of one dimensional kinematics and the same could be applied and generated for 2 and 3 dimensional kinematics as well. This serves merely as a guide for users and need not be strictly followed.
+
+\subsubsection{Age group of 16-18}
+
+In the age group of students aged between 16-18, are the higher secondary school students who have some technical awareness on robotics and some software skills. SentiBots can act as a platform to introduce these students to the world of electronics and robotics through and introductory course. It can facilitate learning through experimentation and safe flight tests due to the frame design and software of SentiBots. A lesson plan for an introductory course to robotics using SentiBots is outlined.
+
+In robotics, students are expected to know about the mechanical, electronic and software aspects of robotics including but not limited to control systems, embedded systems and mechanical systems. The planned introductory course must introduce students to mechanical design elements, electronics and PCB design and software algorithms. SentiBots is able to act as a good robotics platform for use in this sample introductory course as it is modular, experimentation-friendly and runs on easily available open-source software.
 
 \section{Results}
 
