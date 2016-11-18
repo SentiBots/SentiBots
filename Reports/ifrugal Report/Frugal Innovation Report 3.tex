@@ -58,11 +58,7 @@ By spinning counter-rotating bullnose propellers using a 4000kV race quad motor,
 
 \subsection{Usage of a coaxial dual-motor thrust design}
 
-Experiments were conducted to determine the motor configuration that would be the most ideal. 3 unique configurations where chosen for testing. Configuration A uses a single 4000kv Electronic Ducted Fan (EDF).  Configuration B utilizes a single 4000kv Racing Quadcopter motor which is spinning a 3040 triple blade propeller. Configuration C uses 2 4000kv motors spinning the same 3040 triple blade propeller stacked vertically with an inter-propeller distance of 8cm. Configuration C is significant as it accounts for the counter-torque effects produced by the motor and offers a method to cancel the effects unlike the preceding configurations which require active compensation from the control surfaces.
-
-Each of these configurations, were tested by measuring the thrust output and current consumption and taking the average of 10 measurements. These results allow computation of the efficiency and maximum thrust output provided by each configuration. Given the battery capacity, flight time expectations and the mass of the SentiBot, the ideal configuration for the SentiBot can be determined.
-
-\begin{table}
+\begin{table}[b]
 	\begin{tabular}{ | l | l l | }
 		Configuration & Maximum Thrust/g & Maximum Current/A \\
 		\hline
@@ -73,6 +69,10 @@ Each of these configurations, were tested by measuring the thrust output and cur
 	\caption{Hardware components of the SentiBot}
 	\label{fig:sb-configs}
 \end{table}
+
+Experiments were conducted to determine the motor configuration that would be the most ideal. 3 unique configurations where chosen for testing. Configuration A uses a single 4000kv Electronic Ducted Fan (EDF).  Configuration B utilizes a single 4000kv Racing Quadcopter motor which is spinning a 3040 triple blade propeller. Configuration C uses 2 4000kv motors spinning the same 3040 triple blade propeller stacked vertically with an inter-propeller distance of 8cm. Configuration C is significant as it accounts for the counter-torque effects produced by the motor and offers a method to cancel the effects unlike the preceding configurations which require active compensation from the control surfaces.
+
+Each of these configurations, were tested by measuring the thrust output and current consumption and taking the average of 10 measurements. These results allow computation of the efficiency and maximum thrust output provided by each configuration. Given the battery capacity, flight time expectations and the mass of the SentiBot, the ideal configuration for the SentiBot can be determined.
 
 \subsection{Jointed control surfaces}
 
@@ -90,19 +90,17 @@ The frame underwent aerodynamic analysis to determine the efficiency and drag co
 	\centering
 	\begin{subfigure}{0.5\textwidth}
 		\centering
-		\includegraphics[width=0.4\linewidth]{aerodynamic-1.png}
-		\caption{}
-		\label{fig:aerodynamic-1}
-	\end{subfigure}
+		\includegraphics[width=0.9\linewidth]{aerodynamic-1.png}
+	\end{subfigure}%
 	\begin{subfigure}{0.5\textwidth}
 		\centering
-		\includegraphics[width=0.4\linewidth]{aerodynamic-2.png}
-		\caption{}
-		\label{fig:aerodynamic-2}
+		\includegraphics[width=0.9\linewidth]{aerodynamic-2.png}
 	\end{subfigure}
+	\caption{Meow}
+	\label{fig:aerodynamic}
 \end{figure}
 
-The aerodynamic analysis of the frame shows that due to the cylindrical frame design, the body is minimized. During forward motion, the drag primarily arises from the electronics compartment but it is considered negligible as the craft is too small for these effects to manifest in a significant manner. The one-sided nature of the electronics compartment results in the loss of radial symmetry which gives rise to some instability but the software mechanisms have been designed and tuned to compensate for these errors
+The aerodynamic analysis of the frame in figure \ref{fig:aerodynamic} shows that due to the cylindrical frame design, the body is minimized. During forward motion, the drag primarily arises from the electronics compartment but it is considered negligible as the craft is too small for these effects to manifest in a significant manner. The one-sided nature of the electronics compartment results in the loss of radial symmetry which gives rise to some instability but the software mechanisms have been designed and tuned to compensate for these errors.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{sb-topdown.png}
