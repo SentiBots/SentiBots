@@ -223,8 +223,9 @@ This lesson plan in Table \ref{tab:lessonplan} only encompasses the topic of one
 
 \subsubsection{Age group of 16-18}
 
-In the age group of students aged between 16-18, are the higher secondary school students who have some technical awareness on robotics and some software skills. SentiBots can act as a platform to introduce these students to the world of electronics and robotics through and introductory course. It can facilitate learning through experimentation and safe flight tests due to the frame design and software of SentiBots. A lesson plan for an introductory course to robotics using SentiBots is outlined.
+In the age group of students aged between 16-18, are the higher secondary school students who have some technical awareness on robotics and some software skills. SentiBots can act as a platform to introduce these students to the world of electronics and robotics through an introductory course. It can facilitate learning through experimentation and safe flight tests due to the frame design and software of SentiBots. A lesson plan for an introductory course to robotics using SentiBots is outlined.
 
+\subsubsection{SentiBot for introduction to robotics}
 In robotics, students are expected to know about the mechanical, electronic and software aspects of robotics including but not limited to control systems, embedded systems and mechanical systems. The planned introductory course must introduce students to mechanical design elements, electronics and PCB design and software algorithms. SentiBots is able to act as a good robotics platform for use in this sample introductory course as it is modular, experimentation-friendly and runs on easily available open-source software.
 
 \begin{table}[h]
@@ -235,15 +236,41 @@ In robotics, students are expected to know about the mechanical, electronic and 
 		1 &  Introduction to Mechanical Design & Make a suitable add-on hardware component for SentiBots using CAD software \\
 		2 &  Introduction to Electronics &  Make a suitable add-on sensor module for SentiBots using PCB design software \\
 		3 &  Advanced Mechanical design & Test out the designed hardware and test fly \\
-		4 &  Advanced Electronics design  & Test out the designed electronics on the SentiBot platform \\
-		5 &  Introduction to ROS  & Use SentiBots and a hardware abstraction layer to teach students ROS \\
-		6 & Intro to ROS (II):Making SentiBot move & Send position commands to SentiBots to move in a particular path through a hardware 				abstraction layer \\
-		7 &  Intro to ROS(III): Making SentiBots See  & Use ROS libraries to allow SentiBot to navigate around obstacles using machine vision and 		the RGB camera \\
-		5 &  Conclusion and Summary lesson  & Combine all the aspects of robotics to navigate an obstacle course \\
+		4 &  Advanced Electronics design & Test out the designed electronics on the SentiBot platform \\
+		5 &  Introduction to ROS & Use SentiBots and a hardware abstraction layer to teach students ROS \\
+		6 &  Introduction to ROS (II):Making SentiBot move & Send position commands to SentiBots to move in a particular path through a hardware abstraction layer \\
+		7 &  Introduction to ROS (III):Making SentiBots See & Use ROS libraries to allow SentiBot to navigate around obstacles using the IR sensors \\
+		8 &  Summary lesson & Combine all the aspects of robotics to navigate an obstacle course \\
 	\end{tabularx}
 	\caption{Proposed lesson plan outline (16-18)}
 	\label{tab:lessonplan1}
 \end{table}
+
+\subsubsection{Age group of 18 and above}
+
+In the age group of 18 and above, the students are expected to have a strong and complete knowledge of the high-school syllabus and are expected to know complex mathematics. Students should have fundamental knowledge on programming, mechanical and electronics design. However, they may lack the indepth knowledge on these robotics systems and be unaware of how to create more complicated robotics systems such as those invovling distributed robotics, swarm and modular robotics. They also lack knowledge on more complicated robotics software and algorthims like the extended Kalman Filter, complex sensor fusion and SLAM.
+
+\subsubsection{SentiBot for advanced robotics}
+This suggested lesson plan delves into advanced robotics by emphasising on complicated algorithms which can be used to complete tasks. Each lesson covers one such aspect of robotics such as localization, navigation or positioning. It uses SentiBot as a hardware platform on which these algorithms can be tested in real life and provides a more realistic and engaging experience as compared to traditional computer simulations. 
+
+\begin{table}[h]
+	\centering
+	\begin{tabularx}{\linewidth}{ | >{\setlength\hsize{.2\hsize}} X | >{\setlength\hsize{.5\hsize}} X | X | }
+		Lesson Number & Lesson title and content & Application of SentiBot \\
+		\hline
+		1 &  Rigid body motion and velocity & Model SentiBots as a rigid body and use linear algebra to desscribe relative 3D motion and velocities \\
+		2 &  Potential Fields &  Implementation of potentials as sensor constraints in SentiBots \\
+		3 &  Collision detection & Use of IR sensors and computer vision to establish collision detection algorithms in SentiBots \\
+		4 &  Graph-based path planning & Implement and test path-planning algorithms in SentiBots \\
+		5 &  Sample-based path planning & Use of probabilistic road-maps for path planning in SentiBots \\
+		6 &  Kalman filter, dynamic linear systems. Extended Kalman filter, dynamic non-linear systems & Use of Kalman filters as a sensor fusion mechanism in SentiBots \\
+		7 &  Bayesian filter & NA\\
+		8 &  Summary lesson & Combine all the aspects of robotics to navigate an obstacle course \\
+	\end{tabularx}
+	\caption{Proposed lesson plan outline (16-18)}
+	\label{tab:lessonplan1}
+\end{table}
+
 
 \section{Results}
 
