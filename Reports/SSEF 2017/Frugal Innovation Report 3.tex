@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
-\setcitestyle{super}
 \usepackage[a4paper,width=160mm,top=20mm,bottom=20mm,bindingoffset=6mm]{geometry}
+\usepackage[superscript,biblabel]{cite}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -26,6 +26,11 @@
 \pagenumbering{gobble}
 \newpage
 \pagenumbering{arabic}
+
+\section{Abstract}
+The Unmanned Aerial Vehicle (UAV) industry has seen a market growth from 552 million USD to 1.4 billion in a span of a year finding applications in several fields including but not limited to agriculture, security and fire-fighting. Currently, the most common and widely available drone platforms are quadrotors- multicopters which use 4 rotors for flight and steering through the concept of differential thrust to each motor. However, as the drone industry expands to provide drone solutions for niche applications, the quadcopter platforms fall short in terms of accessibility, safety and affordability. This project solves that problem by constructing a novel drone flight platform which enhances the performance of existing drones and allows them to be easily applied to many drone solutions. This task requires the platform to have high modularity in the hardware and software while maintaing high safety standards and affordability. An affordable and open architecture drone, SentiBot, is detailed in this work. SentiBot uses a enclosed dual-propeller design similar to coax-copters like the Spherical Flying Vehicle from Japan while using thrust vectoring for steering. SentiBot's moving parts are enclosed within the frame which enhances safety and it's electronics are mounted on the external recessed surface which enhances electronics accessiblity. It is equipped with a dual-processor CPU, the Intel Edison and the STM32F103, to compartmentalise low-level and high-level computational task which allows greater code modularity and code efficiency. The hardware is built to be fully modular and accessible such that the drone can be multipurpose and adapted to several different drone solutions on demand. The software is built Cleanflight and Robot Operating System (ROS) which are both open-source and highly modular allowing software modularity as well. The drone is equipped with 4 IR sensors and 1 RGB camera for autonomous flight as well. It is able to fly stably and is extremely compact, coming in at 9x9x11cm. It can fly in obstacle filled environments a due to its collision protection shell. SentiBots achieves a 15 minute flight-time with a max payload capacity of 100g. With SentiBots, researchers and inventors are able to use the hardware and software modularity to build several variations of the drone to target niche use-cases. This is in contrast to existing quadrotors which lack the hardware flexibilty and accessibility to be as multipurpose as the SentiBot. In conclusion, we have constructed a fully modular hardware and software platform for drone developers to build a wide range of drone solutions due to the multipurpose and autonomous nature of the drone platform.
+
+\newpage
 
 \section{Introduction}
 
@@ -152,6 +157,16 @@ The power electronics consists of four 1-cell 1200 mAh batteries, two 30 A Elect
 
 In terms of power management, 3 voltage levels are required - 14.8V from the battery, 5V for the control board and 3.3V for the control circuity. Since the drone’s ESCs do not come equipped with a built in battery eliminator circuit (BEC) an external switching regulator is used to supply clean 5V for the control board. The onboard 3.3V regulator further steps down the voltage from 5V to 3.3V
 
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{framework.png}
+	\end{subfigure}
+	\caption{Electronics Wireup}
+	\label{fig:electronics}
+\end{figure}
+
 \section{Software Design}
 
 SentiBots has two methods of operation: manual and autonomous. In manual, an operator has full control and information from the drone. Operated autonomously, the drone is user-programed to complete tasks with little or no human intervention. SentiBots has two subsystems: control and intelligence. The control subsystem consists of the hardware interface to GPIO and the Inertial Measurement Unit (IMU), and relevant Proprotional Integral Derevative (PID) loops. It also can provide basic obstacle avoidance. The intelligence subsystem is for complex tasks like navigation, localization, vision, object identification and other tasks for autonomous flight. It also provides communication with the groundstation.
@@ -195,9 +210,7 @@ The results of testing were positive. The SentiBot shows the ability to lift off
 
 The project has accomplished its goal of designing and constructing a novel drone platform which solves many of the problems with conventional drones. In the future, work can be conducted into some specific use-cases with this drone which allows us to implement the drone platform as a real-life drone solution.
 
-\section{References}
-
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 \bibliography{report}
 
 \end{document}
