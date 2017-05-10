@@ -1,12 +1,12 @@
 [submodule "code"]
 	path = code
-	url = ssh://git@makerforce.io:222/SentiBots/code.git
+	url = https://github.com/solderneer/SentiBots-code.git
 [submodule "design"]
 	path = design
-	url = ssh://git@makerforce.io:222/SentiBots/design.git
+	url = https://github.com/solderneer/SentiBots-design
 [submodule "presentations"]
 	path = presentations
-	url = ssh://git@makerforce.io:222/SentiBots/presentations.git
+	url = https://github.com/solderneer/SentiBots-presentations
 [submodule "website"]
 	path = website
-	url = ssh://git@makerforce.io:222/SentiBots/website.git
+	url = https://github.com/solderneer/SentiBots-website
