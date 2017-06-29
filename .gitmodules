@@ -4,9 +4,6 @@
 [submodule "design"]
 	path = design
 	url = https://github.com/solderneer/SentiBots-design
-[submodule "presentations"]
-	path = presentations
-	url = https://github.com/solderneer/SentiBots-presentations
 [submodule "website"]
 	path = website
 	url = https://github.com/solderneer/SentiBots-website
