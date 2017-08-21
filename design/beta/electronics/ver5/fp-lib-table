@@ -1,0 +1,8 @@
+(fp_lib_table
+  (lib (name BAT54C)(type Legacy)(uri /home/sudharshan/Desktop/Projects/SentiBots/design/beta/electronics/libraries/BAT54C.mod)(options "")(descr ""))
+  (lib (name HMC5883L)(type Legacy)(uri /home/sudharshan/Desktop/Projects/SentiBots/design/beta/electronics/libraries/HMC5883L.mod)(options "")(descr ""))
+  (lib (name MMBT3906)(type Legacy)(uri /home/sudharshan/Desktop/Projects/SentiBots/design/beta/electronics/libraries/MMBT3906.mod)(options "")(descr ""))
+  (lib (name MPU-6050)(type Legacy)(uri /home/sudharshan/Desktop/Projects/SentiBots/design/beta/electronics/libraries/MPU-6050.mod)(options "")(descr ""))
+  (lib (name MPU-9250)(type Legacy)(uri /home/sudharshan/Desktop/Projects/SentiBots/design/beta/electronics/libraries/MPU-9250.mod)(options "")(descr ""))
+  (lib (name STM32F103CBT6)(type Legacy)(uri /home/sudharshan/Desktop/Projects/SentiBots/design/beta/electronics/libraries/STM32F103CBT6.mod)(options "")(descr ""))
+)

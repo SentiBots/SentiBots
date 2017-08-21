@@ -1,0 +1,32 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#(c) SnapEDA 2016 (snapeda.com)
+#This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0
+#
+# BAT54C
+#
+DEF BAT54C D 0 40 N N 1 L N
+F0 "D" 100 100 50 H V L BNN
+F1 "BAT54C" 100 -150 50 H V L BNN
+F2 "SOT23-R" 0 0 50 H I L BNN
+F3 "BAT54C" 0 0 50 H I L BNN "MP"
+F4 "SOT-23 Fairchild Semiconductor" 0 0 50 H I L BNN "Package"
+F5 "BAT54 Series 0.8 V 200 mA 30 V Max Reverse Voltage Schottky Diode - SOT-23-3" 0 0 50 H I L BNN "Description"
+F6 "Fairchild Semiconductor" 0 0 50 H I L BNN "MF"
+F7 "0.06 USD" 0 0 50 H I L BNN "Price"
+F8 "Good" 0 0 50 H I L BNN "Availability"
+DRAW
+C 0 0 10 0 0 20 N
+P 2 0 0 10 50 50 0 50 N
+P 2 0 0 10 0 50 -50 50 N
+P 2 0 0 6 0 50 0 -50 N
+P 2 0 0 10 -50 -50 50 -50 N
+P 3 0 0 10 -50.0 150.0 50.0 150.0 0.0 50.0 F
+P 3 0 0 10 -50.0 -150.0 0.0 -50.0 50.0 -150.0 F
+X A1 1 0 200 100 D 40 40 0 0 P 
+X A2 2 0 -200 100 U 40 40 0 0 P 
+X C 3 100 0 100 L 40 40 0 0 P 
+ENDDRAW
+ENDDEF
+#
+# End Library
